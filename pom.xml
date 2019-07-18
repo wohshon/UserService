@@ -69,7 +69,7 @@
   <access>
     <username>opentlc-mgr</username>
     <password>r3h4t1!</password>
-    <masterUrl>https://api.cluster-sgp-22c5.sgp-22c5.openshiftworkshop.com:6443</masterUrl>
+    <masterUrl>https://api.cluster-sgp-03b8.sgp-03b8.openshiftworkshop.com:6443</masterUrl>
     <apiVersion></apiVersion>
   </access>
     </configuration>

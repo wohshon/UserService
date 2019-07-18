@@ -48,7 +48,7 @@ public class UserServiceFacadeController {
         
         RestTemplate restTemplate = new RestTemplate();
         UserObject user=restTemplate.getForObject(uri+userId, UserObject.class);
-    	return "This is User Service  : "+user.getName() ;
+    	return user.getName() ;
         //return "This is User Service  : " ;
     }
 
