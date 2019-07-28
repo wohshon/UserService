@@ -23,5 +23,6 @@ public class AuthFilter implements Filter{
 		//get header
 		String token=(String)((HttpServletRequest)request).getHeader("Authorization");
 		log.info("token "+token);
+		chain.doFilter(request, response);
 	}
 }
