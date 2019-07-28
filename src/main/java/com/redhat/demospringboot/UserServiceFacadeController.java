@@ -40,12 +40,12 @@ public class UserServiceFacadeController {
     }
 		
     @GetMapping("/userService/{userId}")
-    public String getUser(@PathVariable String userId) {
+    public String getUser(@PathVariable String userId, @RequestHeader("Authorization") String token) {
         log.info("User Facade- get info for  "+userId);
         //call backend
         final String uri = env.getProperty("backend.endpoint");
         log.info("uri: "+uri);
-        
+        log.info("got token from header "+token);
         RestTemplate restTemplate = new RestTemplate();
         UserObject user=restTemplate.getForObject(uri+userId, UserObject.class);
     	return user.getName() ;

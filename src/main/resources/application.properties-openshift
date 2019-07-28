@@ -2,7 +2,6 @@
 keycloak.enabled=false
 keycloak.realm=demo-realm
 #keycloak.auth-server-url=https://sso-sso-app-demo.apps.cluster-sgp-22c5.sgp-22c5.openshiftworkshop.com/auth
-#keycloak.auth-server-url=http://192.168.0.101:8080/auth
 keycloak.ssl-required = none
 #keycloak.bearer-only=true
 #external

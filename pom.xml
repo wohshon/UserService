@@ -12,7 +12,7 @@
 	<artifactId>demo-springboot</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>facadeServiceA</name>
-	<description>FacadeServiceA</description>
+	<description>UserServiceBackend</description>
 
 	<properties>
 <fabric8.generator.from>registry.redhat.io/openjdk/openjdk-8-rhel8:latest</fabric8.generator.from>
@@ -34,7 +34,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
