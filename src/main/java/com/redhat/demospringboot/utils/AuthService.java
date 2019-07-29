@@ -52,12 +52,13 @@ public class AuthService {
 	}
 	
 	public String getInfo(String token) {
+		String results=null;
 		try {
-			getPublicKey();
+			results=getPublicKey();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return "YADA";
+		return results;
 	}
 }
