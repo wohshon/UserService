@@ -26,8 +26,10 @@ public class AuthFilter implements Filter{
 			throws IOException, ServletException {
 		//get header
 		String token=(String)((HttpServletRequest)request).getHeader("Authorization");
-		authService.getInfo(token);
+		String publicKey=authService.getInfo(token);
+		log.info("publicKey:"+publicKey);
 		log.info("token "+token);
+		
 		chain.doFilter(request, response);
 	}
 }
