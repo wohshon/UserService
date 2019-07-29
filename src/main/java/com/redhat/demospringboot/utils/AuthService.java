@@ -10,6 +10,7 @@ import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.logging.Logger;
 
 import javax.net.ssl.SSLContext;
@@ -88,8 +89,15 @@ public class AuthService {
             //.setSigningKeyResolver(secretService.getSigningKeyResolver())
         	.setSigningKey(getKey(publickey))	
             .parseClaimsJws(jwt);
-        log.info("issuer:" +jws.getBody().get("issuer").toString());
+        	log.info("size of claims: "+jws.getBody().entrySet().size());
+        	
+        	Iterator<String> i=jws.getBody().keySet().iterator();
+        	while (i.hasNext()) {
+            	log.info(i.next());
 
+        	}
+
+        	
         return new JwtResponse(jws);
     } 	
 
