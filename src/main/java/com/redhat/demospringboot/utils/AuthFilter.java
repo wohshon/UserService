@@ -10,6 +10,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 @Component
@@ -17,11 +18,15 @@ import org.springframework.stereotype.Component;
 public class AuthFilter implements Filter{
 	Logger log=Logger.getLogger(this.getClass().getName());
 
+	@Autowired
+	private AuthService authService;
+	
 	@Override
 	public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain)
 			throws IOException, ServletException {
 		//get header
 		String token=(String)((HttpServletRequest)request).getHeader("Authorization");
+		authService.getInfo(token);
 		log.info("token "+token);
 		chain.doFilter(request, response);
 	}
