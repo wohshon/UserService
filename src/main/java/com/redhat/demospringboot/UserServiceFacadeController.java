@@ -99,4 +99,6 @@ public class UserServiceFacadeController {
      			  return ((KeycloakPrincipal) request.getUserPrincipal())
      			    .getKeycloakSecurityContext().getTokenString();
      }
+    
+   
 }

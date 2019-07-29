@@ -24,6 +24,10 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureException;
+
 @Component
 public class AuthService {
     @Autowired
@@ -59,14 +63,27 @@ public class AuthService {
         return publicKey.asText();
 	}
 	
-	public String getInfo(String token) {
+	public String getInfo(String jwt) {
 		String results=null;
 		try {
 			results=getPublicKey();
-			
+	        try{
+		    	Claims claims = Jwts.parser().setSigningKey(results).parseClaimsJws(jwt).getBody();
+		    	String jti = claims.getId();
+		    	String iss = claims.getIssuer();
+		    	String sub = claims.getSubject();
+		    	String iat = claims.getIssuedAt().toString();
+		    	String exp = claims.getExpiration().toString();
+		    	log.info("issuer: "+iss);
+	        } catch (SignatureException e){
+	          e.printStackTrace();
+	        }			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return results;
 	}
+
+
 }
+
