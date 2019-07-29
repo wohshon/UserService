@@ -1,6 +1,7 @@
 package com.redhat.demospringboot.utils;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -23,10 +24,12 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.redhat.demospringboot.SecretService;
+import com.redhat.demospringboot.model.JwtResponse;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
 
 @Component
 public class AuthService {
@@ -67,23 +70,25 @@ public class AuthService {
 		String results=null;
 		try {
 			results=getPublicKey();
-	        try{
-		    	Claims claims = Jwts.parser().setSigningKey(results).parseClaimsJws(jwt).getBody();
-		    	String jti = claims.getId();
-		    	String iss = claims.getIssuer();
-		    	String sub = claims.getSubject();
-		    	String iat = claims.getIssuedAt().toString();
-		    	String exp = claims.getExpiration().toString();
-		    	log.info("issuer: "+iss);
-	        } catch (SignatureException e){
-	          e.printStackTrace();
-	        }			
+			parser(jwt);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return results;
 	}
 
+    @Autowired
+    private SecretService secretService;
+    public JwtResponse parser(String jwt) throws UnsupportedEncodingException {
+
+
+        Jws<Claims> jws = Jwts.parser()
+            .setSigningKeyResolver(secretService.getSigningKeyResolver())
+            .parseClaimsJws(jwt);
+        log.info("issuer:" +jws.getBody().get("issuer").toString());
+
+        return new JwtResponse(jws);
+    } 	
 
 }
 
