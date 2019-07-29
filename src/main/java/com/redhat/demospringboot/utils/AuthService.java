@@ -38,10 +38,11 @@ public class AuthService {
 	    CloseableHttpClient httpClient = HttpClients.custom()
 	                    .setSSLSocketFactory(csf)
 	                    .build();
-
 	    HttpComponentsClientHttpRequestFactory requestFactory =
-	                    new HttpComponentsClientHttpRequestFactory();
-        final String uri = env.getProperty("sso.internal.endpoint");
+                new HttpComponentsClientHttpRequestFactory();
+
+	    requestFactory.setHttpClient(httpClient);
+	    final String uri = env.getProperty("sso.internal.endpoint");
         log.info("uri: "+uri);
 		
         ResponseEntity<String> response 
