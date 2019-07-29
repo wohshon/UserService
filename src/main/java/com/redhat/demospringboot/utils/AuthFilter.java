@@ -30,7 +30,8 @@ public class AuthFilter implements Filter{
 		String jwt=(String)(((HttpServletRequest)request).getHeader("Authorization")).substring(7);
 		log.info("jwt "+jwt);
 		JwtResponse jwtResponse=authService.getInfo(jwt);
-		log.info("issuer:"+jwtResponse.getJws().getBody().getIssuer());
+		log.info("clientId:"+jwtResponse.getJws().getBody().get("clientId"));
+		log.info("scope:"+jwtResponse.getJws().getBody().get("scope"));
 		
 		chain.doFilter(request, response);
 	}
