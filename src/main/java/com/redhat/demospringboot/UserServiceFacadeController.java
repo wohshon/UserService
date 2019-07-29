@@ -45,6 +45,7 @@ public class UserServiceFacadeController {
         //call backend
         final String uri = env.getProperty("backend.endpoint");
         log.info("uri: "+uri);
+        token=token.substring(7);
         log.info("got token from header "+token);
         RestTemplate restTemplate = new RestTemplate();
         UserObject user=restTemplate.getForObject(uri+userId, UserObject.class);
