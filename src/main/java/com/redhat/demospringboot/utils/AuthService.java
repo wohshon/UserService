@@ -1,5 +1,6 @@
 package com.redhat.demospringboot.utils;
 
+import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -20,13 +21,16 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 @Component
 public class AuthService {
     @Autowired
     private Environment env;
 	Logger log=Logger.getLogger(this.getClass().getName());
     
-	private String getPublicKey() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+	private String getPublicKey() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException, IOException {
 		TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
 
 	    SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
@@ -48,7 +52,11 @@ public class AuthService {
         ResponseEntity<String> response 
         = new RestTemplate(requestFactory).exchange(
         uri, HttpMethod.GET, null, String.class);
-		return response.getBody();
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode root = mapper.readTree(response.getBody());
+        JsonNode publicKey = root.path("public_key");        
+		//return response.getBody();
+        return publicKey.asText();
 	}
 	
 	public String getInfo(String token) {
