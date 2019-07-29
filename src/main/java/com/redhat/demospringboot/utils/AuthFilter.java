@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+
+import com.redhat.demospringboot.model.JwtResponse;
 @Component
 @Order(1)
 public class AuthFilter implements Filter{
@@ -27,8 +29,8 @@ public class AuthFilter implements Filter{
 		//get header
 		String jwt=(String)(((HttpServletRequest)request).getHeader("Authorization")).substring(7);
 		log.info("jwt "+jwt);
-		String publicKey=authService.getInfo(jwt);
-		log.info("publicKey:"+publicKey);
+		JwtResponse jwtResponse=authService.getInfo(jwt);
+		log.info("issuer:"+jwtResponse.getJws().getBody().getIssuer());
 		
 		chain.doFilter(request, response);
 	}

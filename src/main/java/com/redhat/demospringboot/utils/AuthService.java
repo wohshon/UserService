@@ -66,24 +66,25 @@ public class AuthService {
         return publicKey.asText();
 	}
 	
-	public String getInfo(String jwt) {
-		String results=null;
+	public JwtResponse getInfo(String jwt) {
+		JwtResponse jwtResponse=null;
 		try {
-			results=getPublicKey();
-			parser(jwt);
+			String publickey=getPublicKey();
+			jwtResponse=parser(jwt, publickey);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		return results;
+		return jwtResponse;
 	}
 
-    @Autowired
-    private SecretService secretService;
-    public JwtResponse parser(String jwt) throws UnsupportedEncodingException {
+//    @Autowired
+//    private SecretService secretService;
+    public JwtResponse parser(String jwt, String publickey) throws UnsupportedEncodingException {
 
 
         Jws<Claims> jws = Jwts.parser()
-            .setSigningKeyResolver(secretService.getSigningKeyResolver())
+            //.setSigningKeyResolver(secretService.getSigningKeyResolver())
+        	.setSigningKey(publickey)	
             .parseClaimsJws(jwt);
         log.info("issuer:" +jws.getBody().get("issuer").toString());
 
