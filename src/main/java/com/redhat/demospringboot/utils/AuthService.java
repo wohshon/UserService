@@ -1,8 +1,15 @@
 package com.redhat.demospringboot.utils;
 
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.util.logging.Logger;
 
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import javax.net.ssl.SSLContext;
+
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +26,21 @@ public class AuthService {
     private Environment env;
 	Logger log=Logger.getLogger(this.getClass().getName());
     
-	private String getPublicKey() {
-		   CloseableHttpClient httpClient
-		      = HttpClients.custom()
-		        .setSSLHostnameVerifier(new NoopHostnameVerifier())
-		        .build();
-		    HttpComponentsClientHttpRequestFactory requestFactory 
-		      = new HttpComponentsClientHttpRequestFactory();
-		    requestFactory.setHttpClient(httpClient);
-		//RestTemplate restTemplate = new RestTemplate(requestFactory);
+	private String getPublicKey() throws KeyManagementException, NoSuchAlgorithmException, KeyStoreException {
+		TrustStrategy acceptingTrustStrategy = (X509Certificate[] chain, String authType) -> true;
+
+	    SSLContext sslContext = org.apache.http.ssl.SSLContexts.custom()
+	                    .loadTrustMaterial(null, acceptingTrustStrategy)
+	                    .build();
+
+	    SSLConnectionSocketFactory csf = new SSLConnectionSocketFactory(sslContext);
+
+	    CloseableHttpClient httpClient = HttpClients.custom()
+	                    .setSSLSocketFactory(csf)
+	                    .build();
+
+	    HttpComponentsClientHttpRequestFactory requestFactory =
+	                    new HttpComponentsClientHttpRequestFactory();
         final String uri = env.getProperty("sso.internal.endpoint");
         log.info("uri: "+uri);
 		
@@ -38,7 +51,12 @@ public class AuthService {
 	}
 	
 	public String getInfo(String token) {
-		getPublicKey();
+		try {
+			getPublicKey();
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
 		return "YADA";
 	}
 }
