@@ -44,7 +44,7 @@ public class SecretService {
 
     public void setSecrets(Map<String, String> secrets) {
         Assert.notNull(secrets);
-        Assert.hasText(secrets.get(SignatureAlgorithm.RS256.getValue()));
+//        Assert.hasText(secrets.get(SignatureAlgorithm.RS256.getValue()));
         Assert.hasText(secrets.get(SignatureAlgorithm.HS256.getValue()));
         Assert.hasText(secrets.get(SignatureAlgorithm.HS384.getValue()));
         Assert.hasText(secrets.get(SignatureAlgorithm.HS512.getValue()));
@@ -56,10 +56,10 @@ public class SecretService {
         return TextCodec.BASE64.decode(secrets.get(SignatureAlgorithm.HS256.getValue()));
     }
 
-    public byte[] getRS256SecretBytes() {
-        return TextCodec.BASE64.decode(secrets.get(SignatureAlgorithm.RS256.getValue()));
-    }
-
+	/*
+	 * public byte[] getRS256SecretBytes() { return
+	 * TextCodec.BASE64.decode(secrets.get(SignatureAlgorithm.RS256.getValue())); }
+	 */
     public byte[] getHS384SecretBytes() {
         return TextCodec.BASE64.decode(secrets.get(SignatureAlgorithm.HS384.getValue()));
     }
@@ -75,8 +75,8 @@ public class SecretService {
         secrets.put(SignatureAlgorithm.HS384.getValue(), TextCodec.BASE64.encode(key.getEncoded()));
         key = MacProvider.generateKey(SignatureAlgorithm.HS512);
         secrets.put(SignatureAlgorithm.HS512.getValue(), TextCodec.BASE64.encode(key.getEncoded()));
-        key = MacProvider.generateKey(SignatureAlgorithm.RS256);
-        secrets.put(SignatureAlgorithm.RS256.getValue(), TextCodec.BASE64.encode(key.getEncoded()));
+        //key = MacProvider.generateKey(SignatureAlgorithm.RS256);
+        //secrets.put(SignatureAlgorithm.RS256.getValue(), TextCodec.BASE64.encode(key.getEncoded()));
         return secrets;
     }
 }
