@@ -32,7 +32,7 @@ public class AuthFilter implements Filter{
 		JwtResponse jwtResponse=authService.getInfo(jwt);
 		log.info("clientId:"+jwtResponse.getJws().getBody().get("clientId"));
 		log.info("scope:"+jwtResponse.getJws().getBody().get("scope"));
-		
+		request.setAttribute("REQ_JWT_RESPONSE", jwtResponse);//probably not a good idea for production system
 		chain.doFilter(request, response);
 	}
 }

@@ -25,6 +25,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.redhat.demospringboot.model.JwtResponse;
 import com.redhat.demospringboot.model.UserObject;
 
 @RestController
@@ -38,7 +39,9 @@ public class UserServiceFacadeController {
     public String index() {
         return "This is Facade Service";
     }
-		
+
+    @Scope(scopeName = WebApplicationContext.SCOPE_REQUEST,
+            proxyMode = ScopedProxyMode.TARGET_CLASS)
     @GetMapping("/userService/{userId}")
     public String getUser(@PathVariable String userId, @RequestHeader("Authorization") String token) {
         log.info("User Facade- get info for  "+userId);
@@ -47,6 +50,13 @@ public class UserServiceFacadeController {
         log.info("uri: "+uri);
         token=token.substring(7);
         log.info("got token from header "+token);
+  	  HttpServletRequest request =
+			    ((ServletRequestAttributes) RequestContextHolder
+			      .currentRequestAttributes()).getRequest();
+  	  	JwtResponse jwtResponse=(JwtResponse)request.getAttribute("REQ_JWT_RESPONSE");
+  	  	//dummy check for logic
+  	  	log.info("ClientId: "+jwtResponse.getJws().getBody().get("clientId"));
+  	  	
         RestTemplate restTemplate = new RestTemplate();
         UserObject user=restTemplate.getForObject(uri+userId, UserObject.class);
     	return user.getName() ;
